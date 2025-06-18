@@ -1,0 +1,132 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-color: #048693;
+  background-image: url('../pics/background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.login-box {
+  background: #fff;
+  padding: 2em;
+  border-radius: 10px;
+  width: 300px;
+  max-width: 90vw;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.login-box img {
+  display: block;
+  margin: 0 auto 1.5em;
+  width: 70%;
+  max-width: 250px;
+}
+
+.input-group {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1.5em;
+}
+
+.input-group i {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #999;
+  pointer-events: none;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.7em 0.7em 0.7em 2.2em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.95em;
+  box-sizing: border-box;
+}
+
+/* Champ invalide */
+input.invalid {
+  border: 2px solid red;
+  background-color: #ffecec;
+}
+
+/* Bouton */
+.login-box button {
+  width: 100%;
+  padding: 0.7em;
+  background-color: #048693;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.login-box button:hover {
+  background-color: #036c78;
+}
+
+/* Message d'erreur */
+.error {
+  color: #b30000;
+  font-size: 0.9em;
+  margin-top: -1em;
+  margin-bottom: 1em;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.error.visible {
+  opacity: 1;
+}
+
+.error i {
+  color: #b30000;
+  font-size: 1em;
+}
+
+/* Animation shake */
+@keyframes shake {
+  0%   { transform: translateX(0); }
+  25%  { transform: translateX(-5px); }
+  50%  { transform: translateX(5px); }
+  75%  { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.login-box.shake {
+  animation: shake 0.3s ease;
+}
+.loading-text {
+  font-style: italic;
+  color: #444;
+  text-align: center;
+  margin-top: 0.5em;
+}
+
+.loading-subtext {
+  font-size: 0.85em;
+  color: #666;
+  text-align: center;
+  margin-top: 0.3em;
+}
+
