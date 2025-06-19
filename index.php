@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', 1);
+
 $accepted_langs = ['fr', 'en', 'it', 'de'];
 $lang_code = $_GET['lang'] ?? substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 $lang_code = in_array($lang_code, $accepted_langs) ? $lang_code : 'fr';
@@ -79,26 +83,28 @@ define("XL_USER", $_SESSION['username']);
 
 <!-- Bandeau utilisateur/langue/logo -->
 <div class="global-header">
-  <img src="pics/medium-logo.png" alt="Logo Natus" style="max-width: 160px; margin-bottom: 1em;">
-
-  <div class="language-switcher">
-    <label for="lang-select"><i class="fa fa-globe"></i> <?= XL_LANG['language'] ?? 'Langue' ?> :</label>
-    <select id="lang-select">
-      <option value="fr">Français</option>
-      <option value="en">English</option>
-      <option value="it">Italiano</option>
-      <option value="de">Deutsch</option>
-    </select>
+  <div class="logo-block">
+    <img src="pics/medium-logo.png" alt="Logo Natus">
   </div>
 
-  <div class="user-info">
-    <p><strong><?= XL_LANG['connected_to'] ?? 'Connecté à :' ?></strong> <?= htmlspecialchars(XL_HOSTNAME) ?></p>
-    <p><strong><?= XL_LANG['user'] ?? 'Utilisateur :' ?></strong> <?= htmlspecialchars(XL_USER) ?></p>
-
-    <form action="logout.php" method="post">
-      <input type="hidden" name="lang" value="<?= htmlspecialchars(XL_LANG_CODE) ?>">
-      <button type="submit"><?= XL_LANG['logout'] ?? 'Se déconnecter' ?></button>
-    </form>
+  <div class="user-bar">
+    <div class="language-switcher">
+      <label for="lang-select"><i class="fa fa-globe"></i> <?= XL_LANG['language'] ?? 'Langue' ?> :</label>
+      <select id="lang-select">
+        <option value="fr">Français</option>
+        <option value="en">English</option>
+        <option value="it">Italiano</option>
+        <option value="de">Deutsch</option>
+      </select>
+    </div>
+    <div class="user-info">
+      <p><strong><?= XL_LANG['connected_to'] ?? 'Connecté à :' ?></strong> <?= htmlspecialchars(XL_HOSTNAME) ?> -  </p>
+      <p><strong> <?= XL_LANG['user'] ?? 'Utilisateur :' ?></strong> <?= htmlspecialchars(XL_USER) ?></p>
+      <form action="logout.php" method="post">
+        <input type="hidden" name="lang" value="<?= htmlspecialchars(XL_LANG_CODE) ?>">
+        <button type="submit"><?= XL_LANG['logout'] ?? 'Se déconnecter' ?></button>
+      </form>
+    </div>
   </div>
 </div>
 

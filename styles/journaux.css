@@ -6,37 +6,131 @@ body {
   margin: 0.5em 1em 1em 1em;
 }
 
-/* ---------- Header global ---------- */
+/* ---------- Global Header Layout ---------- */
 .global-header {
+  height: auto;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
   gap: 1em;
-  font-size: 0.9em;
+  flex-wrap: wrap;
+  padding-bottom: 0.2em;
   margin-bottom: 1em;
-  padding-bottom: 0.5em;
-  border-bottom: 2px solid #048693;
+}
+.global-header img {
+  max-width: 160px;
 }
 
-.global-header .language-switcher label {
-  margin-right: 0.3em;
+.logo-block {
+  display: flex;
+  align-items: stretch;
 }
 
+.logo-block img {
+  height: 100%;
+  object-fit: contain; /* conserve le ratio sans déformation */
+  display: block;
+}
+
+
+.user-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+
+.language-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.language-switcher select {
+  margin-top: 15px; /* ✅ descend légèrement le sélecteur */
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+}
+
+.user-info span {
+  white-space: nowrap;
+}
+
+.user-bar form {
+  margin-left: 0.8em; /* ✅ espace entre "Utilisateur" et le bouton */
+}
+
+
+
+.global-header .language-switcher,
 .global-header .user-info {
-  text-align: right;
+  display: flex;
+  flex-direction: align;
+  align-items: flex-end;
+  gap: 0.1em;
 }
-
 .global-header .user-info p {
   margin: 0.2em 0;
 }
-
-.global-header form {
-  margin-top: 0.3em;
+.global-header .user-info form {
+  margin-top: 0.4em; /* ⇐ séparation avec les lignes de texte */
+}
+.global-header .language-switcher label {
+  margin-right: 0.3em;
+  margin-bottom: 0.2em;
+}
+@media (max-width: 768px) {
+  .global-header {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .global-header .language-switcher,
+  .global-header .user-info {
+    align-items: flex-start;
+  }
 }
 
-/* ---------- Wrapper structure header ---------- */
+/* ---------- Onglets ---------- */
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #048693;
+  margin-bottom: 1em;
+}
+.tab {
+  padding: 0.6em 1.2em;
+  cursor: pointer;
+  background-color: #f1f1f1;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  font-weight: bold;
+  font-size: 1em;
+  color: #048693;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  margin-right: 0.2em;
+  transition: background-color 0.2s ease-in-out;
+}
+.tab:hover {
+  background-color: #e9f6f6;
+}
+.tab.active {
+  background-color: white;
+  border-bottom: 2px solid white;
+}
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
 
+/* ---------- Mise en page Viewer ---------- */
 .layout {
   display: flex;
   justify-content: space-between;
@@ -44,171 +138,76 @@ body {
   gap: 2em;
   flex-wrap: wrap;
 }
-
 .left-panel {
   flex: 1 1 60%;
   min-width: 300px;
 }
-
 .right-panel {
   flex: 0 0 250px;
   text-align: right;
 }
 
+/* ---------- Table des journaux ---------- */
 .table-wrapper {
   margin-top: 2em;
   width: 100%;
 }
-
-.header-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2em;
-}
-
-.main-content {
-  flex: 1 1 60%;
-  min-width: 300px;
-}
-
-.user-session-top {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 0.5em;
-}
-
-.user-session {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
-  gap: 0.2em;
-  font-size: 0.9em;
-  line-height: 1.2;
-}
-
-.user-session p {
-  margin: 0.2em 0;
-}
-
-.user-session form {
-  margin: 0.3em 0 0 0;
-}
-
-.language-switcher label {
-  margin-right: 0.3em;
-}
-
-/* ---------- Langue ---------- */
-.language-switcher select {
-  padding: 0.3em 0.5em;
-  font-size: 0.9em;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-/* ---------- Table des journaux ---------- */
 #logTable {
   width: 100%;
   font-size: 8pt;
 }
-
 #logTable thead th {
   background-color: #048693;
   color: white;
   font-weight: bold;
   padding: 10px 8px;
 }
-
 #logTable tbody td {
   padding: 6px;
   border-bottom: 1px solid #ddd;
 }
-
 #logTable tbody tr:nth-child(even) {
   background-color: #f4f9f9;
 }
-
 #logTable tbody tr:hover {
   background-color: #e0f5f5;
 }
-
 #logTable th:nth-child(-n+5),
 #logTable td:nth-child(-n+5) {
   white-space: nowrap;
   width: 1%;
 }
 
-/* ---------- Upload et chargement ---------- */
+/* ---------- Zone d'upload ---------- */
 #upload-zone,
 #progressContainer {
   display: none;
   margin-top: 1em;
 }
-
 #logs-container {
   margin-top: 0.5em;
 }
-
-/* ---------- Spinner + chargement visuel ---------- */
-.spinner {
-  margin: 1em auto;
-  width: 30px;
-  height: 30px;
-  border: 4px solid #ccc;
-  border-top: 4px solid #048693;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.loading-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 2em 0;
-  text-align: center;
-}
-
-.loading-text {
-  font-style: italic;
-  color: #444;
-  margin-top: 0.5em;
-  font-weight: bold;
-}
-
-.loading-subtext {
-  font-size: 0.85em;
-  color: #666;
-  margin-top: 0.3em;
-}
-
-/* ---------- Messages ---------- */
-#messageBox {
-  margin-top: 1em;
-  padding: 0.5em;
+.custom-file-button {
+  display: inline-block;
+  background-color: #048693;
+  color: white;
+  padding: 0.5em 1em;
   border-radius: 5px;
-  display: none;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.95em;
+  margin-bottom: 0.5em;
+}
+.custom-file-button:hover {
+  background-color: #036c78;
+}
+#file-chosen {
+  margin-left: 0.5em;
+  font-style: italic;
+  color: #333;
 }
 
-#messageBox.success {
-  background-color: #e0ffe0;
-  border: 1px solid #0a0;
-  color: #060;
-}
-
-#messageBox.error {
-  background-color: #ffe0e0;
-  border: 1px solid #a00;
-  color: #900;
-}
-
+/* ---------- Progress bar ---------- */
 progress {
   width: 100%;
   height: 12px;
@@ -232,91 +231,15 @@ button,
   align-items: center;
   gap: 0.4em;
 }
-
 button:hover,
 .styled-button:hover,
 .dt-button:hover {
   background-color: #036c78;
 }
-
 .dt-button:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(4, 134, 147, 0.3);
 }
-
-/* ---------- DataTables ---------- */
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-  background: #eee;
-  border: none;
-  border-radius: 4px;
-  padding: 4px 8px;
-  margin: 0 2px;
-}
-
-div.dataTables_wrapper .dt-buttons {
-  margin-bottom: 1em;
-  margin-top: 1em;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-  background: #048693;
-  color: white !important;
-}
-
-.dataTables_filter input,
-.dataTables_length select {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 4px;
-  margin-left: 0.5em;
-}
-
-form label {
-  display: block;
-  margin-bottom: 0.8em;
-}
-
-.custom-file-button {
-  display: inline-block;
-  background-color: #048693;
-  color: white;
-  padding: 0.5em 1em;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 0.95em;
-  margin-bottom: 0.5em;
-}
-
-.custom-file-button:hover {
-  background-color: #036c78;
-}
-
-#file-chosen {
-  margin-left: 0.5em;
-  font-style: italic;
-  color: #333;
-}
-
-/* ---------- Responsive ---------- */
-@media (max-width: 768px) {
-  .header-wrapper {
-    flex-direction: column;
-  }
-
-  .user-session {
-    align-items: flex-start;
-    text-align: left;
-  }
-
-  .global-header {
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-  }
-}
-
-/* ---------- Personnalisation des boutons DataTables ---------- */
 div.dataTables_wrapper .dt-button {
   background-color: #048693 !important;
   color: white !important;
@@ -332,52 +255,59 @@ div.dataTables_wrapper .dt-button {
   align-items: center;
   gap: 0.4em;
 }
-
 div.dataTables_wrapper .dt-button:hover {
   background-color: #036c78 !important;
-  color: white !important;
 }
-
 div.dataTables_wrapper .dt-button:focus {
   outline: none !important;
   box-shadow: 0 0 0 2px rgba(4, 134, 147, 0.3) !important;
 }
 
-/* ---------- Onglets de navigation ---------- */
-.tabs {
-  display: flex;
-  border-bottom: 2px solid #048693;
-  margin-bottom: 1em;
+/* ---------- DataTables ---------- */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  background: #eee;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin: 0 2px;
 }
-
-.tab {
-  padding: 0.6em 1.2em;
-  cursor: pointer;
-  background-color: #f1f1f1;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  font-weight: bold;
-  font-size: 1em;
-  color: #048693;
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background: #048693;
+  color: white !important;
+}
+.dataTables_filter input,
+.dataTables_length select {
   border: 1px solid #ccc;
-  border-bottom: none;
-  margin-right: 0.2em;
-  transition: background-color 0.2s ease-in-out;
+  border-radius: 4px;
+  padding: 4px;
+  margin-left: 0.5em;
+}
+div.dataTables_wrapper .dt-buttons {
+  margin: 0.5em 0;
+}
+div.dataTables_wrapper .dataTables_length,
+div.dataTables_wrapper .dataTables_filter {
+  margin-top: 0.8em;
+    display: flex;
+  align-items: center;
 }
 
-.tab:hover {
-  background-color: #e9f6f6;
-}
-
-.tab.active {
-  background-color: white;
-  border-bottom: 2px solid white;
-}
-
-.tab-content {
-  display: none;
-}
-
-.tab-content.active {
-  display: block;
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+  .user-session {
+    align-items: flex-start;
+    text-align: left;
+  }
+  .global-header .language-switcher,
+  .global-header .user-info {
+    align-items: flex-start;
+  }
+    div.dataTables_wrapper .dataTables_length,
+  div.dataTables_wrapper .dataTables_filter {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

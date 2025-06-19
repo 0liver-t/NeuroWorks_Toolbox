@@ -1,5 +1,5 @@
 <?php
-// Ce fichier est chargé dynamiquement dans l'onglet "Vérificateur" via index.php
+// Ce fichier est chargé dynamiquement dans l'onglet "Journaux" via index.php
 
 if (!defined('XL_LANG')) {
   http_response_code(403);
@@ -56,15 +56,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="layout">
   <div class="left-panel">
-
-
     <form method="POST" enctype="multipart/form-data">
       <div style="display:flex;align-items:center;gap:0.5em;flex-wrap:wrap;">
         <strong><?= XL_LANG['log_source'] ?? 'Source des fichiers logs :' ?></strong>
         <select id="server-select">
           <option value="local" selected><?= htmlspecialchars(XL_HOSTNAME) ?></option>
         </select>
-
      <!--   <select id="remote-select" onchange="loadRemoteLogs(this.value)">
           <option value=""><?= XL_LANG['select_remote'] ?? '--' ?></option>
           <?php foreach ($remoteDirs as $dir): ?>
@@ -72,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <?php endforeach; ?>
         </select>  -->
       </div>
-      <br><br>
+      <br>
 
       <label>
         <input type="radio" name="source" value="local" onclick="toggleUpload('local'); loadSelectedServerLogs();" <?= $source === 'local' ? 'checked' : '' ?>>
