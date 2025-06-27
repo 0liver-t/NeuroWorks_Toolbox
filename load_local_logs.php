@@ -13,7 +13,7 @@ if (!isset($_SESSION['username']) || !preg_match('/^[a-zA-Z0-9_\-]+$/', $_SESSIO
     exit($lang['access_denied'] ?? 'Accès refusé : utilisateur non authentifié.');
 }
 
-// Répertoire des fichiers locaux (peut être commun à tous les utilisateurs ou dédié selon la logique)
+// Répertoire des fichiers locaux
 define("LOCAL_XML_PATH", "D:/XLTekAudit/");
 define("XSL_PATH", __DIR__ . "/styles/transformlog_sorted.xsl");
 
@@ -23,19 +23,30 @@ if (!is_dir(LOCAL_XML_PATH)) {
     exit($lang['missing_local_folder'] ?? "Erreur : le dossier local des journaux n'existe pas.");
 }
 
-// Création du document XML fusionné
-$masterDoc = new DOMDocument('1.0', 'UTF-8');
-$root = $masterDoc->createElement("xltechlog");
-$masterDoc->appendChild($root);
+// ----------- NOUVELLE FONCTION : Parcours récursif de tous les fichiers .xml -----------
+function getAllXmlFiles($dir) {
+    $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));
+    $files = [];
+    foreach ($rii as $file) {
+        if ($file->isFile() && strtolower($file->getExtension()) === 'xml') {
+            $files[] = $file->getPathname();
+        }
+    }
+    return $files;
+}
 
-// Lecture des fichiers XML dans le dossier local
-$files = glob(LOCAL_XML_PATH . '*.xml');
+// Utilisation de la fonction récursive
+$files = getAllXmlFiles(LOCAL_XML_PATH);
 if (!$files || count($files) === 0) {
     echo "<p>" . ($lang['no_local_found'] ?? 'Aucun fichier journal trouvé dans le dossier local.') . "</p>";
     exit;
 }
 
 // Fusion des balises <activity>
+$masterDoc = new DOMDocument('1.0', 'UTF-8');
+$root = $masterDoc->createElement("xltechlog");
+$masterDoc->appendChild($root);
+
 foreach ($files as $file) {
     $xml = new DOMDocument;
     if (@$xml->load($file)) {

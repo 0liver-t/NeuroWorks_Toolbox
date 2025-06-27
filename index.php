@@ -9,7 +9,8 @@ $accepted_langs = ['fr', 'en', 'it', 'de'];
 $lang_code = $_GET['lang'] ?? substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 $lang_code = in_array($lang_code, $accepted_langs) ? $lang_code : 'fr';
 
-require_once __DIR__ . "/lang/{$lang_code}.php";
+// Correction ici : charger le fichier et récupérer le tableau $lang
+$lang = require __DIR__ . "/lang/{$lang_code}.php";
 
 $hostname = gethostname();
 
@@ -98,8 +99,8 @@ define("XL_USER", $_SESSION['username']);
       </select>
     </div>
     <div class="user-info">
-      <p><strong><?= XL_LANG['connected_to'] ?? 'Connecté à :' ?></strong> <?= htmlspecialchars(XL_HOSTNAME) ?> -  </p>
-      <p><strong> <?= XL_LANG['user'] ?? 'Utilisateur :' ?></strong> <?= htmlspecialchars(XL_USER) ?></p>
+      <p><strong><?= XL_LANG['connected_to'] ?? 'Connecté à :' ?></strong> <?= htmlspecialchars(XL_HOSTNAME) ?> - </p>
+      <p><strong> <?= XL_LANG['user'] ?? 'Utilisateur' ?></strong> : <?= htmlspecialchars(XL_USER) ?></p>
       <form action="logout.php" method="post">
         <input type="hidden" name="lang" value="<?= htmlspecialchars(XL_LANG_CODE) ?>">
         <button type="submit"><?= XL_LANG['logout'] ?? 'Se déconnecter' ?></button>
