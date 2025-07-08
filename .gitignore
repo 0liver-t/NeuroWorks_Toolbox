@@ -1,3 +1,9 @@
+_Corbeille/
+_docs/
+debug/
+cache/*
+logs/*
+logs_remote/*
 web.config 
-*.xml
 info.php
+
