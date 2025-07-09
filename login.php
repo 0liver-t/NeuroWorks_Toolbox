@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="UTF-8">
   <title><?= $lang['login_title'] ?? 'Connexion' ?></title>
+  <link rel="icon" type="image/png" href="pics/favicon-natus.png">
 
   <link rel="stylesheet" href="styles/style.css">
   <link rel="stylesheet" href="styles/all.min.css">
