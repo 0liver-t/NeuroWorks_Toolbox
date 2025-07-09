@@ -35,8 +35,6 @@ It provides an intuitive user interface for accessing logs, checking network por
 
 - **Log Visualization**: Access local and remote logs for event tracking and diagnostics.
 - **Port Monitoring**: Tools to test and verify the status of critical network ports.
-- **Connection Management**: Interfaces for monitoring and managing active connections.
-- **Customizable UI**: Templates and styles to tailor the application's appearance.
 - **Multilingual Support**: Multiple languages supported for international use.
 
 ## 🛠️ Installation
