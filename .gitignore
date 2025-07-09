@@ -1,6 +1,7 @@
 _Corbeille/
 _docs/
 debug/
+cache/
 users/*
 cache/*
 *.xsl
