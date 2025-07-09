@@ -251,9 +251,6 @@ body {
 #logs-table th:nth-child(-n+5),
 #logs-table td:nth-child(-n+5) {
   white-space: nowrap;
-
-
-
   width: 1%;   /*<-- Désactivé pour que ça s’ajuste naturellement */
 }
 
@@ -262,7 +259,7 @@ body {
 #logs-table td:last-child {
   min-width: 400px;
   max-width: 600px;
-  width: 40vw;
+
   white-space: normal;
   width: auto;
 }
@@ -462,3 +459,48 @@ div.dataTables_wrapper .dt-buttons {
     align-items: flex-start;
   }
 }
+
+/* ----- Bloc d'upload XML personnel ----- */
+#upload-zone {
+  display: none;
+  background: #f4f9f9;
+  border: 1.5px dashed #048693;
+  padding: 1em 1.2em;
+  margin-bottom: 1em;
+  border-radius: 7px;
+  max-width: 550px;
+}
+#upload-form {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+#upload-form input[type="file"] {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 4px 8px;
+}
+#upload-form button {
+  background: #048693;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.48em 1em;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  transition: background 0.18s;
+}
+#upload-form button:hover {
+  background: #036c78;
+}
+#upload-feedback {
+  margin-top: 0.8em;
+  color: #048693;
+  font-weight: bold;
+  font-size: 1em;
+}
+

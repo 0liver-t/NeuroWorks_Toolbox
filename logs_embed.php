@@ -75,7 +75,7 @@ foreach ($sources as $key => $src) {
       <?php endif; ?>
     </select>
 
-  </div>
+</div>
 
   <div class="input-with-clear">
     <span id="search-loupe"><i class="fa fa-search"></i></span>
@@ -94,6 +94,16 @@ foreach ($sources as $key => $src) {
 
 <!-- Message d’erreur AJAX -->
 <div id="logs-error"></div>
+	<!-- BLOC UPLOAD LOGS PERSO, MASQUÉ PAR DÉFAUT -->
+	<div id="upload-zone" style="display: none; margin-top: 1em;">
+	  <form id="upload-form" enctype="multipart/form-data" method="post">
+		<input type="file" id="xml-file" name="xml-file[]" accept=".xml" required multiple>
+
+		<button type="submit"><i class="fa fa-upload"></i> Upload</button>
+	  </form>
+	  <div id="upload-feedback"></div>
+	</div>
+  </div>
 <!-- Tableau des logs -->
 <table id="logs-table" class="display">
   <thead>

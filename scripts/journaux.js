@@ -27,10 +27,10 @@ function getDataTableLang() {
 function addCompactButton() {
   setTimeout(function() {
     if ($('#toggle-compact').length === 0 && $('.dt-buttons').length) {
-      const compactBtn = $(`
-        <button id="toggle-compact" type="button" title="${window.lang?.compact_mode || 'Mode compact'}" style="margin-left:0.7em;">
-          <i class="fa fa-compress"></i> <span>${window.lang?.compact_mode || 'Mode compact'}</span>
-        </button>
+      const compactBtn = $(`\
+        <button id="toggle-compact" type="button" title="${window.lang?.compact_mode || 'Mode compact'}" style="margin-left:0.7em;">\
+          <i class="fa fa-compress"></i> <span>${window.lang?.compact_mode || 'Mode compact'}</span>\
+        </button>\
       `);
 
       compactBtn.on('click', function() {
@@ -110,6 +110,15 @@ function renderDateCell(data) {
   return data;
 }
 
+// --- Affichage conditionnel de l'upload zone selon la source ---
+function updateUploadZoneVisibility(selectedSource) {
+  if (selectedSource === 'user') {
+    $('#upload-zone').show();
+  } else {
+    $('#upload-zone').hide();
+  }
+}
+
 // --- Initialisation DataTable ---
 function initDataTable() {
   if (table) {
@@ -132,7 +141,7 @@ function initDataTable() {
   table = $('#logs-table').DataTable({
     serverSide: true,
     processing: true,
-	searching: false,
+    searching: false,
     order: [[0, 'desc']],
     ajax: {
       url: 'load_logs.php',
@@ -246,6 +255,9 @@ function setupSourceSelector() {
     currentSource = this.value;
     localStorage.setItem('log-source', currentSource);
 
+    // Affiche ou cache la zone d'upload selon la source choisie
+    updateUploadZoneVisibility(currentSource);
+
     // Vider le tableau dès la sélection (pour éviter toute confusion)
     if ($.fn.DataTable.isDataTable('#logs-table')) {
       $('#logs-table').DataTable().clear().draw();
@@ -265,8 +277,12 @@ function setupSourceSelector() {
   });
 }
 
+// --- Ready ---
 $(document).ready(function() {
   setupSourceSelector();
+
+  // Affichage zone upload dès le chargement
+  updateUploadZoneVisibility($('#log-source-select').val());
 
   // Vérification au chargement de la page (sur source courante)
   checkAndPrepareSource(currentSource, function(ready, hasLogs) {
@@ -322,3 +338,57 @@ $('#reload-db-btn').on('click', function() {
       showMessage(window.lang?.reload_error_ajax || 'Erreur AJAX lors du rechargement de la base.', 'error');
     });
 });
+
+// --- Upload AJAX log personnel ---
+$('#upload-form').on('submit', function(e) {
+  e.preventDefault();
+  var formData = new FormData(this);
+  formData.append('source', 'user');
+  $('#upload-feedback').html('<i class="fa fa-spinner fa-spin"></i> Upload en cours...');
+
+  $.ajax({
+    url: 'upload_xml.php',
+    type: 'POST',
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function(resp) {
+      $('#upload-feedback').html(resp);
+
+      // Test basique pour détecter succès (adapter si besoin)
+      if (resp.toLowerCase().includes('uploadé')) {
+        $('#upload-feedback').append('<br><i class="fa fa-spinner fa-spin"></i> Indexation des logs...');
+        // Appel AJAX à cache_setup.php pour réindexer
+        $.post('cache_setup.php', { action: 'rebuild', source: 'user' }, function(idxResp) {
+          try {
+            var data = (typeof idxResp === 'string') ? JSON.parse(idxResp) : idxResp;
+            if (data.success) {
+              $('#upload-feedback').append(
+                "<br><span style='color:green;'>Indexation terminée, <strong>" + data.count + "</strong> log(s) en base.</span>"
+              );
+              // Recharger le DataTable après indexation réussie
+              if ($.fn.DataTable.isDataTable('#logs-table')) {
+                setTimeout(function() {
+                  $('#logs-table').DataTable().ajax.reload();
+                  $('#upload-feedback').html('');
+                }, 2000);
+              }
+            } else {
+              $('#upload-feedback').append(
+                "<br><span style='color:red;'>Erreur indexation : " + (data.message || 'inconnue') + "</span>"
+              );
+            }
+          } catch(e) {
+            $('#upload-feedback').append(
+              "<br><span style='color:red;'>Erreur indexation (format réponse) : " + e + "</span>"
+            );
+          }
+        });
+      }
+    },
+    error: function() {
+      $('#upload-feedback').html("Erreur lors de l'upload.");
+    }
+  });
+});
+
