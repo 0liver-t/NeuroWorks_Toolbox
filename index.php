@@ -70,16 +70,23 @@ define("XL_USER", $_SESSION['username']);
       const tabs = document.querySelectorAll(".tab");
       const contents = document.querySelectorAll(".tab-content");
 
-      tabs.forEach(tab => {
-        tab.addEventListener("click", () => {
-          tabs.forEach(t => t.classList.remove("active"));
-          contents.forEach(c => c.classList.remove("active"));
+ tabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    tabs.forEach(t => t.classList.remove("active"));
+    contents.forEach(c => c.classList.remove("active"));
 
-          tab.classList.add("active");
-          const targetId = tab.getAttribute("data-tab");
-          document.getElementById(targetId).classList.add("active");
-        });
-      });
+    tab.classList.add("active");
+    const targetId = tab.getAttribute("data-tab");
+    document.getElementById(targetId).classList.add("active");
+
+    // PATCH : Détruit DataTable si on quitte "Journaux"
+    if (targetId !== "tab-logs" && $.fn.DataTable && $.fn.DataTable.isDataTable('#logs-table')) {
+      $('#logs-table').DataTable().clear().destroy();
+      $('#logs-table').empty();
+    }
+  });
+});
+
     });
   </script>
 </head>
