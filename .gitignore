@@ -1,9 +1,8 @@
-_Corbeille/
-_docs/
-debug/
-cache/
-users/*
-cache/*
+/_Corbeille/
+/_docs/
+/debug/
+/cache/
+/users/
 *.xsl
 *.db
 *.xml
