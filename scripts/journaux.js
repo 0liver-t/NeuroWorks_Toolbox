@@ -1,3 +1,7 @@
+// --- Variable globale pour la source sélectionnée
+let currentSource = localStorage.getItem('log-source') || 'local';
+
+// --- Fonctions d'internationalisation DataTables ---
 function getDataTableLang() {
   return {
     emptyTable:     window.lang?.datatable_emptyTable   || "No data available in table",
@@ -14,10 +18,12 @@ function getDataTableLang() {
       last:     window.lang?.datatable_paginate_last     || "Last",
       next:     window.lang?.datatable_paginate_next     || "Next",
       previous: window.lang?.datatable_paginate_previous || "Previous"
-    }
+    },
+    thousands: '\u202f'
   };
 }
 
+// --- Bouton mode compact DataTables ---
 function addCompactButton() {
   setTimeout(function() {
     if ($('#toggle-compact').length === 0 && $('.dt-buttons').length) {
@@ -48,6 +54,7 @@ function addCompactButton() {
   }, 0);
 }
 
+// --- Message utilisateur ---
 function showMessage(text, type = "success") {
   const box = document.getElementById("messageBox");
   box.innerHTML = text;
@@ -58,20 +65,15 @@ function showMessage(text, type = "success") {
   }, 6000);
 }
 
-const CLIENT_SIDE_THRESHOLD = 5000;
+// --- Fonctions utilitaires ---
 let table;
-let currentServerSide = null;
+let currentServerSide = true;
 
-function showLoader(show) {
-  $('#loader').toggle(!!show);
-}
-function showError(msg) {
-  $('#logs-error').text(msg).show();
-}
-function hideError() {
-  $('#logs-error').hide().text('');
-}
+function showLoader(show) { $('#loader').toggle(!!show); }
+function showError(msg)   { $('#logs-error').text(msg).show(); }
+function hideError()      { $('#logs-error').hide().text(''); }
 
+// --- Formatage des dates ---
 function renderDateCell(data) {
   if (!data) return '';
   const lang = window.langCode || 'fr';
@@ -108,9 +110,9 @@ function renderDateCell(data) {
   return data;
 }
 
-function initDataTable(serverSide) {
-  if (currentServerSide === serverSide && table) return;
-  if ($.fn.DataTable.isDataTable('#logs-table')) {
+// --- Initialisation DataTable ---
+function initDataTable() {
+  if (table) {
     $('#logs-table').DataTable().clear().destroy();
     $('#logs-table').empty();
     $('#logs-table').append(
@@ -124,30 +126,25 @@ function initDataTable(serverSide) {
       </tr></thead>`
     );
   }
-  currentServerSide = serverSide;
 
   $.fn.dataTable.ext.errMode = 'none';
 
   table = $('#logs-table').DataTable({
-    serverSide: serverSide,
+    serverSide: true,
     processing: true,
+	searching: false,
     order: [[0, 'desc']],
-    ajax: serverSide
-      ? {
-          url: 'load_logs.php',
-          type: 'GET',
-          error: function(xhr) { showLoader(false); showError(window.lang?.error_loading_logs || 'Erreur lors du chargement des logs.'); },
-          data: function(d) { d.search = { value: $('#search-input').val() }; },
-          beforeSend: function() { showLoader(true); hideError(); },
-          complete:   function() { showLoader(false); }
-        }
-      : {
-          url: 'load_logs.php?per_page=250000',
-          dataSrc: 'data',
-          error: function(xhr) { showLoader(false); showError(window.lang?.error_loading_logs || 'Erreur lors du chargement des logs.'); },
-          beforeSend: function() { showLoader(true); hideError(); },
-          complete:   function() { showLoader(false); }
-        },
+    ajax: {
+      url: 'load_logs.php',
+      type: 'GET',
+      data: function(d) {
+        d.search = { value: $('#search-input').val() };
+        d.source = currentSource;
+      },
+      error: function(xhr) { showLoader(false); showError(window.lang?.error_loading_logs || 'Erreur lors du chargement des logs.'); },
+      beforeSend: function() { showLoader(true); hideError(); },
+      complete:   function() { showLoader(false); }
+    },
     columns: [
       { data: 'time', title: window.lang?.date || 'Date/Heure', render: renderDateCell },
       { data: 'mach',   title: window.lang?.machine || 'Machine' },
@@ -161,22 +158,19 @@ function initDataTable(serverSide) {
         $(row).addClass('tr-deleting');
       }
     },
-	dom: '<"dtheadbar d-flex justify-content-between align-items-center"lBfp>rt<"dtfootbar d-flex justify-content-between align-items-center"ip>',
+    dom: '<"dtheadbar d-flex justify-content-between align-items-center"lBfp>rt<"dtfootbar d-flex justify-content-between align-items-center"ip>',
     buttons: [
       { 
-		extend: 'pdfHtml5',
-		text: '<i class="fa fa-file-pdf"></i> ' + (window.lang?.export_pdf || 'Exporter PDF'),
-		orientation: 'landscape', // optionnel : paysage
-		pageSize: 'A4'            // optionnel : A4
-	  },
+        extend: 'pdfHtml5',
+        text: '<i class="fa fa-file-pdf"></i> ' + (window.lang?.export_pdf || 'Exporter PDF'),
+        orientation: 'landscape',
+        pageSize: 'A4'
+      },
       { extend: 'excelHtml5', text: '<i class="fa fa-file-excel"></i> ' + (window.lang?.export_excel || 'Exporter Excel') },
       { extend: 'print',      text: '<i class="fa fa-print"></i> ' + (window.lang?.print || 'Imprimer') }
     ],
     pageLength: 25,
-    language: {
-		...getDataTableLang(),
-		thousands: '\u202f'
-	},
+    language: getDataTableLang(),
     initComplete: function () {
       document.querySelectorAll('.dt-button').forEach(btn => btn.classList.add('styled-button'));
       addCompactButton();
@@ -189,29 +183,99 @@ function initDataTable(serverSide) {
   });
 }
 
+// --- Reload DataTable avec la recherche courante ---
 function reloadWithSearch() {
   hideError();
   if (!table) return;
   showLoader(true);
-  if (currentServerSide) {
-    table.ajax.reload(function() { showLoader(false); }, false);
+  table.ajax.reload(function() { showLoader(false); }, false);
+}
+
+// --- Vérification source et préchargement ---
+function checkAndPrepareSource(source, callback) {
+  $.getJSON('check_source.php?source=' + encodeURIComponent(source), function(res) {
+    // Si dossier ou DB manquants mais des logs présents => indexation automatique
+    if (!res.log_dir_exists) {
+      showError('Le dossier des logs est introuvable.');
+      if (typeof callback === "function") callback(false);
+      return;
+    }
+    if (!res.db_exists && res.has_logs) {
+      showLoader(true);
+      // Reconstruit la base à la volée
+      $.post('cache_setup.php', { action: 'rebuild', source: source })
+        .done(function(resp) {
+          showLoader(false);
+          if (resp && resp.success) {
+            showMessage("Base créée avec succès (" + resp.count + " lignes).", "success");
+            if (typeof callback === "function") callback(true, res.has_logs);
+          } else {
+            showError(resp && resp.message ? resp.message : "Erreur lors de la création de la base.");
+            if (typeof callback === "function") callback(false);
+          }
+        })
+        .fail(function() {
+          showLoader(false);
+          showError("Erreur AJAX lors de la création de la base.");
+          if (typeof callback === "function") callback(false);
+        });
+    } else if (res.db_exists && !res.has_logs) {
+      // Base existe mais aucun log XML -> affichage message custom
+      if (typeof callback === "function") callback(true, false);
+    } else {
+      // Tout est prêt
+      if (typeof callback === "function") callback(true, res.has_logs);
+    }
+  });
+}
+
+// --- Sélection du log source avec auto-indexation ---
+function setupSourceSelector() {
+  const $sel = $('#log-source-select');
+  if ($sel.length === 0) return;
+  const local = localStorage.getItem('log-source');
+  if (local && $sel.find('option[value="' + local + '"]').length) {
+    $sel.val(local);
+    currentSource = local;
   } else {
-    table.ajax.url('load_logs.php?search=' + encodeURIComponent($('#search-input').val()) + '&per_page=250000').load(function() {
-      showLoader(false);
-    });
+    currentSource = $sel.find('option').first().val();
+    $sel.val(currentSource);
+    localStorage.setItem('log-source', currentSource);
   }
+  $sel.on('change', function() {
+    currentSource = this.value;
+    localStorage.setItem('log-source', currentSource);
+
+    // Vider le tableau dès la sélection (pour éviter toute confusion)
+    if ($.fn.DataTable.isDataTable('#logs-table')) {
+      $('#logs-table').DataTable().clear().draw();
+    }
+
+    checkAndPrepareSource(currentSource, function(ready, hasLogs) {
+      if (ready) {
+        if (!hasLogs) {
+          $('#logs-error').text("Aucun fichier de logs trouvé pour cette source.").show();
+        } else {
+          hideError();
+          reloadWithSearch();
+        }
+      }
+      // Sinon, l'erreur a déjà été affichée
+    });
+  });
 }
 
 $(document).ready(function() {
-  $.getJSON('load_logs.php?count=1', function(resp) {
-    const total = resp?.recordsTotal || 0;
-    if (total < CLIENT_SIDE_THRESHOLD) {
-      initDataTable(false);
-    } else {
-      initDataTable(true);
+  setupSourceSelector();
+
+  // Vérification au chargement de la page (sur source courante)
+  checkAndPrepareSource(currentSource, function(ready, hasLogs) {
+    if (ready && hasLogs) {
+      initDataTable();
+    } else if (ready && !hasLogs) {
+      $('#logs-error').text("Aucun fichier de logs trouvé pour cette source.").show();
     }
-  }).fail(function() {
-    initDataTable(true);
+    // Sinon, erreur déjà affichée
   });
 
   $('#search-btn').on('click', reloadWithSearch);
@@ -234,10 +298,11 @@ $(document).ready(function() {
   });
 });
 
+// --- Recharge DB ---
 $('#reload-db-btn').on('click', function() {
   if (!confirm(window.lang?.confirm_reload_db || 'Cette opération va recharger et réindexer la base des logs depuis les fichiers XML.\nContinuer ?')) return;
   showLoader(true);
-  $.post('cache_setup.php', { action: 'rebuild' })
+  $.post('cache_setup.php', { action: 'rebuild', source: currentSource })
     .done(function(resp) {
       showLoader(false);
       if (resp && resp.success) {

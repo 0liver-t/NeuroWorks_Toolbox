@@ -1,15 +1,61 @@
 <?php
-// cache_setup.php
-// Re‐indexe tous les <activity> de server_logs_dir dans la table logs (nouveau schéma),
-// crée la base et la table si nécessaire, et affiche le nombre d’entrées insérées.
-
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// 1. Charger la configuration
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+
+// 1. Charger la configuration centrale
 $config  = require __DIR__ . '/config.php';
-$logDir  = $config['server_logs_dir'];
-$dbPath  = $config['cache_db'];
+$sources = $config['sources'];
+$source  = $_POST['source'] ?? $_GET['source'] ?? 'local';
+
+// --- Gestion de la source utilisateur dynamique ---
+if ($source === 'user') {
+    $username = $_SESSION['username'] ?? null;
+    if (!$username) {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => "Utilisateur non connecté"]);
+        exit;
+    }
+    $logDir = __DIR__ . "/logs/{$username}";
+    $dbPath = __DIR__ . "/cache/{$username}.db";
+} elseif (isset($sources[$source])) {
+    $logDir = $sources[$source]['logs_dir'];
+    $dbPath = $sources[$source]['cache_db'];
+} else {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Source inconnue']);
+    exit;
+}
+
+// --- Création du dossier logs si absent ---
+if (!is_dir($logDir)) {
+    if (!@mkdir($logDir, 0775, true)) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => "Impossible de créer le dossier de logs : $logDir"]);
+        exit;
+    }
+}
+
+// --- Création du dossier de la base SQLite si absent ---
+$dbDir = dirname($dbPath);
+if (!is_dir($dbDir)) {
+    if (!@mkdir($dbDir, 0775, true)) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => "Impossible de créer le dossier base SQLite : $dbDir"]);
+        exit;
+    }
+}
+
+// Sécurité : vérifie existence chemin et nom de base, sinon erreur
+if (empty($logDir) || empty($dbPath)) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Source mal configurée']);
+    exit;
+}
 
 // -------- Fonction principale d'indexation --------
 function rebuild_logs_cache($logDir, $dbPath) {
@@ -46,7 +92,7 @@ VALUES (:time, :mach, :user, :acID, :evID, :evdesc)
 SQL
     );
 
-    // 5. Scanner récursivement les XML de server_logs_dir
+    // 5. Scanner récursivement les XML du dossier logs_dir
     $iterator = new RecursiveIteratorIterator(
         new RecursiveDirectoryIterator($logDir, FilesystemIterator::SKIP_DOTS)
     );
@@ -149,5 +195,4 @@ try {
 } catch (Exception $e) {
     echo "<p style='color:red;'>Erreur lors de l'indexation : " . htmlspecialchars($e->getMessage()) . "</p>";
 }
-
 ?>

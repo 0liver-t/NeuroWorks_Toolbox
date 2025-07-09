@@ -30,6 +30,8 @@ define("XL_USER", $_SESSION['username']);
 <head>
   <meta charset="UTF-8">
   <title>NeuroWorks Toolbox</title>
+  <link rel="icon" type="image/png" href="pics/favicon-natus.png">
+
 
   <!-- Feuilles de style -->
   <link rel="stylesheet" href="styles/jquery.dataTables.min.css">
@@ -38,10 +40,11 @@ define("XL_USER", $_SESSION['username']);
   <link rel="stylesheet" href="styles/journaux.css"> <!-- À charger en dernier -->
 
   <!-- Scripts -->
+  
   <script src="scripts/jquery-3.6.0.min.js"></script>
+  <script src="scripts/moment.min.js"></script>
   <script src="scripts/jquery.dataTables.min.js"></script>
   <script src="scripts/datetime-moment.js"></script>
-  <script src="scripts/moment.min.js"></script>
   <script src="scripts/dataTables.buttons.min.js"></script>
   <script src="scripts/jszip.min.js"></script>
   <script src="scripts/pdfmake.min.js"></script>

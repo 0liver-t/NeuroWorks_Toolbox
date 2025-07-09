@@ -1,4 +1,6 @@
-/* ---------- Base ---------- */
+/* --------------------------------------------------------------------------
+   BASE GLOBALE
+--------------------------------------------------------------------------- */
 body {
   font-family: Verdana, sans-serif;
   font-size: 10pt;
@@ -6,7 +8,9 @@ body {
   margin: 0.5em 1em 1em 1em;
 }
 
-/* ---------- Global Header Layout ---------- */
+/* --------------------------------------------------------------------------
+   EN-TÊTE GLOBAL
+--------------------------------------------------------------------------- */
 .global-header {
   display: flex;
   justify-content: space-between;
@@ -50,7 +54,7 @@ body {
 .global-header .user-info form { margin-top: 0.4em; }
 .global-header .language-switcher label { margin-right: 0.3em; margin-bottom: 0.2em; }
 
-/* ---------- Responsive Header ---------- */
+/* ----------- Responsive pour l'en-tête ----------- */
 @media (max-width: 768px) {
   .global-header {
     flex-direction: column;
@@ -63,7 +67,9 @@ body {
   }
 }
 
-/* ---------- Onglets ---------- */
+/* --------------------------------------------------------------------------
+   ONGLET PRINCIPAL
+--------------------------------------------------------------------------- */
 .tabs {
   display: flex;
   border-bottom: 2px solid #048693;
@@ -91,7 +97,9 @@ body {
 .tab-content { display: none; }
 .tab-content.active { display: block; }
 
-/* ---------- Mise en page Viewer ---------- */
+/* --------------------------------------------------------------------------
+   MISE EN PAGE PRINCIPALE
+--------------------------------------------------------------------------- */
 .layout {
   display: flex;
   justify-content: space-between;
@@ -102,9 +110,169 @@ body {
 .left-panel { flex: 1 1 60%; min-width: 300px; }
 .right-panel { flex: 0 0 250px; text-align: right; }
 
-/* ---------- Table des journaux ---------- */
+/* --------------------------------------------------------------------------
+   BARRE DE RECHERCHE ET SÉLECTEUR DE SOURCES
+--------------------------------------------------------------------------- */
+#search-bar {
+  margin-bottom: 1em;
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  flex-wrap: wrap;
+}
+
+.source-select-bar {
+  text-align: right;
+  /* margin-bottom: 0.5em; */
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+}
+
+.source-select-bar label {
+  font-weight: 500;
+  margin-right: 0.5em;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  height: 2.4em;
+  font-size: 1.09em;
+}
+
+#log-source-select,
+#search-input {
+  min-height: 2.4em;
+  font-size: 1.13em;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  padding-left: 1.1em;
+  padding-right: 1.1em;
+  line-height: 1.2;
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: top;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+#log-source-select {
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+#log-source-select:focus,
+#search-input:focus {
+  border-color: #048693;
+  outline: none;
+  box-shadow: 0 0 3px #04869340;
+}
+#log-source-select:hover {
+  border-color: #036c78;
+}
+
+#search-input {
+  min-width: 250px;
+  padding-left: 2.3em !important;   /* place pour la loupe */
+  padding-right: 2.5em !important;  /* place pour la croix */
+  line-height: 1.2;
+}
+
+/* Loupe et croix dans le champ recherche */
+.input-with-clear {
+  position: relative;
+  display: inline-block;
+  width: auto;
+}
+#search-loupe {
+  position: absolute;
+  left: 0.7em;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #b1b1b1;
+  font-size: 1.18em;
+  z-index: 3;
+  pointer-events: none;
+}
+#search-clear {
+  position: absolute;
+  right: 0.7em;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 1.5em;
+  height: 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  padding: 0;
+}
+#search-clear i.fa-times-circle {
+  font-size: 1.25em;
+  color: #b1b1b1;
+  pointer-events: none;
+  transition: color 0.18s;
+}
+#search-clear:hover i.fa-times-circle { color: #048693; }
+
+/* Chemin des logs locaux */
+#local-log-path {
+  display: none;
+  font-size: 0.97em;
+  color: #555;
+  margin-top: 2px;
+  margin-bottom: 0.2em;
+}
+
+/* Message d’erreur AJAX */
+#logs-error {
+  color: #b00;
+  font-weight: bold;
+  display: none;
+  margin-bottom: 1em;
+}
+
+/* --------------------------------------------------------------------------
+   TABLE DES JOURNAUX
+--------------------------------------------------------------------------- */
 .table-wrapper { margin-top: 2em; width: 100%; }
-#logs-table { width: 100%; font-size: 9pt; }
+#logs-table_wrapper {
+  margin-left: 0;
+  margin-right: auto;
+  width: 100%;
+}
+#logs-table {
+  width: 100% !important;
+  font-size: 9pt;
+  /* table-layout: fixed;*/
+}
+
+/* Les 5 premières colonnes : largeur auto, sans retour à la ligne */
+#logs-table th:nth-child(-n+5),
+#logs-table td:nth-child(-n+5) {
+  white-space: nowrap;
+
+
+
+  width: 1%;   /*<-- Désactivé pour que ça s’ajuste naturellement */
+}
+
+/* Colonne Description : prend tout l’espace, retour à la ligne */
+#logs-table th:last-child,
+#logs-table td:last-child {
+  min-width: 400px;
+  max-width: 600px;
+  width: 40vw;
+  white-space: normal;
+  width: auto;
+}
+
+#logs-table td:last-child {
+  white-space: pre-line;
+  word-break: break-all;
+  min-width: 150px;
+}
+
 #logs-table thead th {
   background-color: #048693;
   color: white;
@@ -117,11 +285,6 @@ body {
 }
 #logs-table tbody tr:nth-child(even) { background-color: #f4f9f9; }
 #logs-table tbody tr:hover { background-color: #e0f5f5; }
-#logs-table th:nth-child(-n+5),
-#logs-table td:nth-child(-n+5) {
-  white-space: nowrap;
-  width: 1%;
-}
 .tr-deleting td {
   color: #b50000 !important;
   font-weight: bold !important;
@@ -142,7 +305,10 @@ body.compact-table #logs-table tbody td {
   line-height: 1.3;
 }
 
-/* ---------- Zone d'upload ---------- */
+
+/* --------------------------------------------------------------------------
+   ZONE D'UPLOAD
+--------------------------------------------------------------------------- */
 #upload-zone,
 #progressContainer {
   display: none;
@@ -163,10 +329,14 @@ body.compact-table #logs-table tbody td {
 .custom-file-button:hover { background-color: #036c78; }
 #file-chosen { margin-left: 0.5em; font-style: italic; color: #333; }
 
-/* ---------- Progress bar ---------- */
+/* --------------------------------------------------------------------------
+   PROGRESS BAR
+--------------------------------------------------------------------------- */
 progress { width: 100%; height: 12px; }
 
-/* ---------- Boutons et harmonisation export/compact ---------- */
+/* --------------------------------------------------------------------------
+   BOUTONS ET EXPORT/COMPACT
+--------------------------------------------------------------------------- */
 button,
 .styled-button,
 .dt-button,
@@ -208,7 +378,9 @@ button i,
   transition: color 0.18s;
 }
 
-/* ---------- DataTables Pagination bien alignée ---------- */
+/* --------------------------------------------------------------------------
+   DATATABLES PAGINATION ALIGNEMENT
+--------------------------------------------------------------------------- */
 .dtheadbar,
 .dtfootbar {
   display: flex !important;
@@ -218,13 +390,11 @@ button i,
   gap: 1em;
   flex-wrap: wrap;
 }
-
 .dtfootbar {
   margin-top: 0.5em;
   border-top: 1.5px solid #d0d0d0;
   padding-top: 0.3em;
 }
-
 .dataTables_wrapper .dataTables_paginate {
   display: flex !important;
   align-items: center !important;
@@ -234,7 +404,6 @@ button i,
   float: none !important;
   text-align: right !important;
 }
-
 .dataTables_wrapper .dataTables_paginate .paginate_button {
   background: #eee;
   border: none;
@@ -246,7 +415,6 @@ button i,
   background: #048693;
   color: white !important;
 }
-
 .dataTables_filter input,
 .dataTables_length select {
   border: 1px solid #ccc;
@@ -255,7 +423,6 @@ button i,
   margin-left: 0.5em;
   font-size: 1em;
 }
-
 div.dataTables_wrapper .dt-buttons {
   margin: 0.5em 0;
 }
@@ -264,7 +431,6 @@ div.dataTables_wrapper .dt-buttons {
 .dtheadbar .dataTables_filter {
   margin-bottom: 0 !important;
 }
-
 .dtheadbar .dataTables_filter {
   margin-left: auto !important;
 }
@@ -272,7 +438,6 @@ div.dataTables_wrapper .dt-buttons {
   margin-left: 1em !important;
   margin-right: 0 !important;
 }
-
 .dtfootbar .dataTables_info {
   margin-right: auto !important;
 }
@@ -281,57 +446,9 @@ div.dataTables_wrapper .dt-buttons {
   margin-right: 0 !important;
 }
 
-/* ---------- Croix FontAwesome + loupe dans le champ recherche ---------- */
-.input-with-clear {
-  position: relative;
-  display: inline-block;
-  width: auto;
-}
-#search-input {
-  padding-left: 2.3em !important;   /* place pour la loupe */
-  padding-right: 2.5em !important;  /* place pour la croix */
-  height: 2.4em;
-  font-size: 1.13em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  line-height: 1.2;
-}
-#search-loupe {
-  position: absolute;
-  left: 0.7em;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #b1b1b1;
-  font-size: 1.18em;
-  z-index: 3;
-  pointer-events: none;
-}
-#search-clear {
-  position: absolute;
-  right: 0.7em;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  width: 1.5em;
-  height: 1.5em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 3;
-  padding: 0;
-}
-#search-clear i.fa-times-circle {
-  font-size: 1.25em;
-  color: #b1b1b1;
-  pointer-events: none;
-  transition: color 0.18s;
-}
-#search-clear:hover i.fa-times-circle { color: #048693; }
-
-/* ---------- Responsive ---------- */
+/* --------------------------------------------------------------------------
+   RESPONSIVE POUR PETITS ÉCRANS
+--------------------------------------------------------------------------- */
 @media (max-width: 768px) {
   .layout { flex-direction: column; }
   .user-session { align-items: flex-start; text-align: left; }
@@ -345,4 +462,3 @@ div.dataTables_wrapper .dt-buttons {
     align-items: flex-start;
   }
 }
-

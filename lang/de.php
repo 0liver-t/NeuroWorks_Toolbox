@@ -71,8 +71,8 @@ $lang = [
     // Custom
     'search_placeholder'           => "Globale Suche...",
     'search_btn'                   => "Suchen",
-    'reload_db_title'              => "Datenbank neu laden",
-    'reload_db'                    => "DB neu laden",
+    'reload_db_title'              => "Neueste Protokolle laden",
+    'reload_db'                    => "Aktualisieren",
     'loading'                      => "Laden...",
 	'compact_mode'    => 'Kompaktmodus',
 'normal_mode'     => 'Normalmodus',
@@ -82,6 +82,11 @@ $lang = [
 'reload_error_ajax' => "AJAX-Fehler beim Neuladen der Datenbank.",
 'rows_in_db'      => "Zeilen in der Datenbank.",
 'export_pdf' => 'PDF exportieren',
+    'logs_local' => 'Lokale Protokolle',
+    'remote_sites' => 'Externe Standorte',
+    'my_logs' => 'Meine persönlichen Logs',
     // Add more keys as needed
 ];
 return $lang;
+
+

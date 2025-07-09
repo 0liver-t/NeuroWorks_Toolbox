@@ -71,8 +71,8 @@ $lang = [
     // Custom
     'search_placeholder'           => "Recherche globale...",
     'search_btn'                   => "Rechercher",
-    'reload_db_title'              => "Recharger la base de données",
-    'reload_db'                    => "Recharger la base",
+    'reload_db_title'              => "Charger les logs les plus récents",
+    'reload_db'                    => "Actualiser",
     'loading'                      => "Chargement...",
 	'compact_mode'   		 	=> 'Mode compact',
 	'normal_mode'     			=> 'Mode normal',
@@ -81,7 +81,12 @@ $lang = [
 	'reload_error'    			=> "Erreur lors du rechargement.",
 	'reload_error_ajax' 		=> "Erreur AJAX lors du rechargement de la base.",
 	'rows_in_db'      			=> "lignes en base.",
-'export_pdf' => 'Exporter PDF',
+	'export_pdf' 				=> 'Exporter PDF',	
+	'logs_local' 				=> 'Logs locaux',
+    'remote_sites' 				=> 'Sites distants',
+    'my_logs' 					=> 'Mes logs personnels',
     // Ajoute d'autres clés ici si besoin
 ];
 return $lang;
+
+
