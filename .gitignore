@@ -3,6 +3,8 @@
 /debug/
 /cache/
 /users/
+/logs/
+/logs_remote/
 *.xsl
 *.db
 *.xml
