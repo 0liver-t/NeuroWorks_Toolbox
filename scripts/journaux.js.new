@@ -1,0 +1,143 @@
+// --- Variable globale pour la source sélectionnée
+let currentSource = localStorage.getItem('log-source') || 'local';
+
+// --- Fonctions exposées pour la gestion d’onglet ---
+window.logsInit = function() {
+  setupSourceSelector();
+
+  // Affichage zone upload dès l'activation
+  updateUploadZoneVisibility($('#log-source-select').val());
+
+  // Vérification au chargement de la page (sur source courante)
+  checkAndPrepareSource(currentSource, function(ready, hasLogs) {
+    if (ready && hasLogs) {
+      initDataTable();
+    } else if (ready && !hasLogs) {
+      $('#logs-error').text("Aucun fichier de logs trouvé pour cette source.").show();
+    }
+    // Sinon, erreur déjà affichée
+  });
+
+  $('#search-btn').off().on('click', reloadWithSearch);
+  $('#search-input').off().on('keypress', function(e) {
+    if (e.which === 13) reloadWithSearch();
+  });
+
+  $('#search-input').off('input').on('input', function() {
+    if (this.value.length > 0) {
+      $('#search-clear').show();
+    } else {
+      $('#search-clear').hide();
+    }
+  });
+
+  $('#search-clear').off().on('click', function() {
+    $('#search-input').val('');
+    $('#search-clear').hide();
+    reloadWithSearch();
+  });
+
+  $('#reload-db-btn').off().on('click', function() {
+    if (!confirm(window.lang?.confirm_reload_db || 'Cette opération va recharger et réindexer la base des logs depuis les fichiers XML.\nContinuer ?')) return;
+    showLoader(true);
+    $.post('cache_setup.php', { action: 'rebuild', source: currentSource })
+      .done(function(resp) {
+        showLoader(false);
+        if (resp && resp.success) {
+          showMessage(
+            (window.lang?.reload_success || "Base rechargée avec succès") +
+              '&nbsp;: <strong>' + resp.count + '</strong> ' +
+              (window.lang?.rows_in_db || 'lignes en base.'),
+            'success'
+          );
+          reloadWithSearch();
+        } else {
+          showMessage(resp && resp.message ? resp.message : (window.lang?.reload_error || "Erreur lors du rechargement."), 'error');
+        }
+      })
+      .fail(function() {
+        showLoader(false);
+        showMessage(window.lang?.reload_error_ajax || 'Erreur AJAX lors du rechargement de la base.', 'error');
+      });
+  });
+
+  $('#upload-form').off().on('submit', function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    formData.append('source', 'user');
+    $('#upload-feedback').html('<i class="fa fa-spinner fa-spin"></i> Upload en cours...');
+
+    $.ajax({
+      url: 'upload_xml.php',
+      type: 'POST',
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function(resp) {
+        $('#upload-feedback').html(resp);
+
+        if (resp.toLowerCase().includes('uploadé')) {
+          $('#upload-feedback').append('<br><i class="fa fa-spinner fa-spin"></i> Indexation des logs...');
+          $.post('cache_setup.php', { action: 'rebuild', source: 'user' }, function(idxResp) {
+            try {
+              var data = (typeof idxResp === 'string') ? JSON.parse(idxResp) : idxResp;
+              if (data.success) {
+                $('#upload-feedback').append(
+                  "<br><span style='color:green;'>Indexation terminée, <strong>" + data.count + "</strong> log(s) en base.</span>"
+                );
+                if ($.fn.DataTable.isDataTable('#logs-table')) {
+                  setTimeout(function() {
+                    $('#logs-table').DataTable().ajax.reload();
+                    $('#upload-feedback').html('');
+                  }, 2000);
+                }
+              } else {
+                $('#upload-feedback').append(
+                  "<br><span style='color:red;'>Erreur indexation : " + (data.message || 'inconnue') + "</span>"
+                );
+              }
+            } catch(e) {
+              $('#upload-feedback').append(
+                "<br><span style='color:red;'>Erreur indexation (format réponse) : " + e + "</span>"
+              );
+            }
+          });
+        }
+      },
+      error: function() {
+        $('#upload-feedback').html("Erreur lors de l'upload.");
+      }
+    });
+  });
+};
+
+window.logsDestroy = function() {
+  if ($.fn.DataTable.isDataTable('#logs-table')) {
+    $('#logs-table').DataTable().clear().destroy();
+    $('#logs-table').html('<thead><tr>'
+      + '<th>Date/Heure</th>'
+      + '<th>Machine</th>'
+      + '<th>Utilisateur</th>'
+      + '<th>Action</th>'
+      + '<th>Événement</th>'
+      + '<th>Description</th>'
+      + '</tr></thead>');
+  }
+  $('#logs-error').hide().text('');
+  $('#upload-feedback').html('');
+  $('#messageBox').hide().text('');
+};
+
+// --- (le reste de ton code reste inchangé ci-dessous, comme utilitaires, initDataTable, etc.) ---
+
+// ... Toutes les fonctions existantes inchangées :
+// - getDataTableLang
+// - addCompactButton
+// - showMessage
+// - showLoader, showError, hideError
+// - renderDateCell
+// - updateUploadZoneVisibility
+// - initDataTable
+// - reloadWithSearch
+// - checkAndPrepareSource
+// - setupSourceSelector

@@ -1,0 +1,118 @@
+﻿Port;Protocol;Service Name;Description of Service
+80;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+80;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+443;TCP;Natus Gateway Service API;Implemented in NW10GMA2, this service can be configured to listen for autoSCORE license and usage information from other Neuroworks systems on this port.
+443;TCP;Persyst Diagnostic Service;Optional third-party software, the Persyst Diagnostic Service provides a method of uploading log files to Persyst.
+554;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+554;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+1433;TCP;SQL Server Express or Standard (MSSQLSERVER);The local or remote MS SQL instance that communicates with XLDB.
+2001;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2001;TCP;XLAnalyzerSrv;The XLAnalyzerSrv opens TCP connections to communicate with other applications and services. It performs analysis on study data.
+2002;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2003;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2004;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2005;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2006;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2007;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2008;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2009;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2010;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2010;TCP;NWStorage;The NWStorage service opens TCP connections to communicate with other applications and services. It writes EEG/PSG patient study files to a specified filesystem location and receive data from multiple EEG/PSG applications and services.
+2010;TCP;XLAnalyzerSrv;The XLAnalyzerSrv opens TCP connections to communicate with other applications and services. It performs analysis on study data.
+2011;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2011;TCP;NWStorage;The NWStorage service opens TCP connections to communicate with other applications and services. It writes EEG/PSG patient study files to a specified filesystem location and receive data from multiple EEG/PSG applications and services.
+2012;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2013;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2014;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2015;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2016;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2017;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2018;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2019;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2020;TCP;NWChat;"The NWChat service for short text messages using the Wave application via the ""lips"" icon in the top right corner of the screen. ."
+2020;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2021;TCP;NWChat;"The NWChat service for short text messages using the Wave application via the ""lips"" icon in the top right corner of the screen. ."
+2021;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2022;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2023;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2024;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2040;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2041;TCP;NWSignal;The NWSignal service opens TCP connections to communicate with other applications and services. It receives raw data from Natus EEG/PSG hardware physically connected to patients and sends data to other EEG/PSG applications and services.
+2100;TCP;NWSentry;The NWSentry service opens TCP connections to monitor the health of Natus applications or services and acts as a software watchdog.
+2101;TCP;NWSentry;The NWSentry service opens TCP connections to monitor the health of Natus applications or services and acts as a software watchdog.
+2200;TCP;Natus Database (XLDB);The Natus Database (XLDB) is a Natus application that provides a distributed database view of live, completed, and archived EEG/PSG patient studies. It synchronizes data with local MSSQL Express instance and central MSQL Server, as well as other remote MSSQL Express instances running on computers with Natus EEG/PSG application software. It also uses a UDP communication channel to discover Natus proprietary IP-based hardware devices like the Natus Base Unit and other amplifiers
+2200;UDP;Natus Database (XLDB);The Natus Database (XLDB) is a Natus application that provides a distributed database view of live, completed, and archived EEG/PSG patient studies. It synchronizes data with local MSSQL Express instance and central MSQL Server, as well as other remote MSSQL Express instances running on computers with Natus EEG/PSG application software. It also uses a UDP communication channel to discover Natus proprietary IP-based hardware devices like the Natus Base Unit and other amplifiers
+5000;TCP;Natus Licensing Service API;Implemented in NW10GMA2, this service receives local autoSCORE license and usage information from the local Neuroworks application on this port. (REST calls based on JSON encapsulated in http/https requests).
+5093;TCP;Sentinel RMS License Manager;Integrated in NW10GMA2, this service listens on this port fo autoSCORE license and usage information from the Natus Licensing Service API.
+5301;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5301;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5302;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5302;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5303;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5303;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5304;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5304;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5305;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5305;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5306;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5306;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5307;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5307;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5308;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5308;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5500;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5500;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5501;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5501;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5502;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5502;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+5554;TCP;NWDiscoveryApp;"Implemented in NW10GMA4, the Discovery app is deployed on Monitoring station. It uses port 5554 for AUTH requests, and port 5555 to send out active list info. It implements following functionalities:
+  • Obtain the list of machines that are monitored by current station
+  • Retrieve the study info and patient info of the live study from the monitored stations
+  • Serialize the information for transmitting via network
+  • Work as a server which provides the info to the requesters that connect"
+5555;TCP;NWDiscoveryApp;"Implemented in NW10GMA4, the Discovery app is deployed on Monitoring station. It uses port 5554 for AUTH requests, and port 5555 to send out active list info. It implements following functionalities:
+  • Obtain the list of machines that are monitored by current station
+  • Retrieve the study info and patient info of the live study from the monitored stations
+  • Serialize the information for transmitting via network
+  • Work as a server which provides the info to the requesters that connect"
+5595;TCP;NWGateway;Implemented in NW10GMA4, the NWGateway is a service that is deployed on acquisition station. NWGateway can host multiple proxies to communicate with different clients. CNS proxy implemented in NW10GMA4 enables data flow between non-NW client like the Mobery CNS and NW components. It uses port 5711 and 5596 to communicate internally with Neuroworks, and ports 5595, 5597, 5598, and 5599 to communicate externally with Moberg CNS monitors.
+5596;TCP;NWGateway;Implemented in NW10GMA4, the NWGateway is a service that is deployed on acquisition station. NWGateway can host multiple proxies to communicate with different clients. CNS proxy implemented in NW10GMA4 enables data flow between non-NW client like the Mobery CNS and NW components. It uses port 5711 and 5596 to communicate internally with Neuroworks, and ports 5595, 5597, 5598, and 5599 to communicate externally with Moberg CNS monitors.
+5597;TCP;NWGateway;Implemented in NW10GMA4, the NWGateway is a service that is deployed on acquisition station. NWGateway can host multiple proxies to communicate with different clients. CNS proxy implemented in NW10GMA4 enables data flow between non-NW client like the Mobery CNS and NW components. It uses port 5711 and 5596 to communicate internally with Neuroworks, and ports 5595, 5597, 5598, and 5599 to communicate externally with Moberg CNS monitors.
+5598;TCP;NWGateway;Implemented in NW10GMA4, the NWGateway is a service that is deployed on acquisition station. NWGateway can host multiple proxies to communicate with different clients. CNS proxy implemented in NW10GMA4 enables data flow between non-NW client like the Mobery CNS and NW components. It uses port 5711 and 5596 to communicate internally with Neuroworks, and ports 5595, 5597, 5598, and 5599 to communicate externally with Moberg CNS monitors.
+5599;TCP;NWGateway;Implemented in NW10GMA4, the NWGateway is a service that is deployed on acquisition station. NWGateway can host multiple proxies to communicate with different clients. CNS proxy implemented in NW10GMA4 enables data flow between non-NW client like the Mobery CNS and NW components. It uses port 5711 and 5596 to communicate internally with Neuroworks, and ports 5595, 5597, 5598, and 5599 to communicate externally with Moberg CNS monitors.
+5610;TCP;XLAlarmsSvc;The XLAlarmsSvc service monitors notifications from other stations and an SQL.
+5611;TCP;XLNetCOMBridge;The XLNetCOMBridge service TCP connections to communicate with other applications and services
+5612;TCP;XLEvtMsgSvc;The XLEvtMsgSvc opens TCP connections to communicate with other applications and services.
+5620;TCP;XLEvtMsgSvc;The XLEvtMsgSvc opens TCP connections to communicate with other applications and services.
+5621;TCP;XLEvtMsgSvc;The XLEvtMsgSvc opens TCP connections to communicate with other applications and services.
+5624;TCP;Natus Database (XLDB);The Natus Database (XLDB) is a Natus application that provides a distributed database view of live, completed, and archived EEG/PSG patient studies. It synchronizes data with local MSSQL Express instance and central MSQL Server, as well as other remote MSSQL Express instances running on computers with Natus EEG/PSG application software. It also uses a UDP communication channel to discover Natus proprietary IP-based hardware devices like the Natus Base Unit and other amplifiers
+5624;UDP;Natus Database (XLDB);The Natus Database (XLDB) is a Natus application that provides a distributed database view of live, completed, and archived EEG/PSG patient studies. It synchronizes data with local MSSQL Express instance and central MSQL Server, as well as other remote MSSQL Express instances running on computers with Natus EEG/PSG application software. It also uses a UDP communication channel to discover Natus proprietary IP-based hardware devices like the Natus Base Unit and other amplifiers
+5625;TCP;Natus Database (XLDB);The Natus Database (XLDB) is a Natus application that provides a distributed database view of live, completed, and archived EEG/PSG patient studies. It synchronizes data with local MSSQL Express instance and central MSQL Server, as well as other remote MSSQL Express instances running on computers with Natus EEG/PSG application software. It also uses a UDP communication channel to discover Natus proprietary IP-based hardware devices like the Natus Base Unit and other amplifiers
+5625;UDP;Natus Database (XLDB);The Natus Database (XLDB) is a Natus application that provides a distributed database view of live, completed, and archived EEG/PSG patient studies. It synchronizes data with local MSSQL Express instance and central MSQL Server, as well as other remote MSSQL Express instances running on computers with Natus EEG/PSG application software. It also uses a UDP communication channel to discover Natus proprietary IP-based hardware devices like the Natus Base Unit and other amplifiers
+5711;TCP;NWGateway;Implemented in NW10GMA4, the NWGateway is a service that is deployed on acquisition station. NWGateway can host multiple proxies to communicate with different clients. CNS proxy implemented in NW10GMA4 enables data flow between non-NW client like the Mobery CNS and NW components. It uses port 5711 and 5596 to communicate internally with Neuroworks, and ports 5595, 5597, 5598, and 5599 to communicate externally with Moberg CNS monitors.
+6661;TCP;Mirth Connect;Mirth® Connect third-party software by NextGen Healthcare use for HL7 integration.
+50000;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+50000;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+50001;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+50001;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+50002;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+50002;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+50003;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+50003;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+52000;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+52000;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+52001;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+52001;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+60000;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+60000;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+60001;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+60001;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+60002;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+60002;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+60003;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+60003;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+62000;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+62000;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+62001;TCP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.
+62001;UDP;XLMediaServer;The XLMediaServer service manages video data acquisition, broadcasting and storage.

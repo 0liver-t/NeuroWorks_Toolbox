@@ -1,0 +1,354 @@
+let portsList = [];
+let uniquePortList = []; // La nouvelle structure
+let portInfo = {};
+
+
+
+
+
+async function loadPortsFromCSV() {
+  const response = await fetch('/templates/ports_services.csv');
+  const text = await response.text();
+  const lines = text.trim().split(/\r?\n/);
+
+  const headers = lines[0].replace(/^\uFEFF/, '').split(';').map(h => h.trim());
+
+  // On récupère toutes les lignes valides
+  const data = lines.slice(1)
+    .map(line => {
+      const values = line.split(';');
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = values[i]?.trim() ?? '');
+      return obj;
+    })
+    .filter(row => row["Port"] && !isNaN(Number(row["Port"])) && row["Protocol"]);
+
+  portsList = data;
+
+  // Regroupement unique : port/proto => services/descriptions
+  const seen = {};
+  uniquePortList = [];
+  data.forEach(p => {
+    const key = `${p["Port"]}_${(p["Protocol"]||"").toUpperCase()}`;
+    if (!seen[key]) {
+      seen[key] = {
+        port: p["Port"],
+        protocol: (p["Protocol"]||"").toUpperCase(),
+        services: [],
+        descriptions: []
+      };
+      uniquePortList.push(seen[key]);
+    }
+    seen[key].services.push(p["Service Name"]);
+    seen[key].descriptions.push(p["Description of Service"]);
+  });
+
+  // (optionnel) pour recherche rapide par port, à garder si tu utilises ailleurs
+  portInfo = {};
+  uniquePortList.forEach(p => {
+    portInfo[p.port] = {
+      service: p.services.join(', '),
+      description: p.descriptions.filter(Boolean).join(' | '),
+      protocol: p.protocol
+    };
+  });
+
+  updatePortSelectByProtocol();
+}
+
+
+// === NOUVEAU : Mise à jour du select de ports selon protocole ===
+function updatePortSelectByProtocol() {
+  const selectedProtocol = document.getElementById('protocolSelect').value.trim().toUpperCase();
+  const portSelect = document.getElementById('portSelect');
+  // Filtrer ports uniques par protocole
+  const filteredPorts = uniquePortList.filter(p => p.protocol === selectedProtocol);
+  portSelect.innerHTML = '<option value="">Sélectionner un port</option>' +
+    filteredPorts.map(p =>
+      `<option value="${p.port}">${p.port}/${p.protocol} - ${p.services.join(', ')}</option>`
+    ).join('');
+}
+
+
+// ---- Timeout JS côté navigateur ----
+async function fetchWithTimeout(url, timeout) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+  try {
+    const resp = await fetch(url, { signal: controller.signal });
+    clearTimeout(id);
+    return resp;
+  } catch (e) {
+    clearTimeout(id);
+    throw new Error("Timeout JS atteint");
+  }
+}
+
+function updateStats() {
+  const results = document.querySelectorAll('.result-card.open, .result-card.closed, .result-card.error');
+  let open = 0, closed = 0;
+  results.forEach(card => {
+    if (card.classList.contains('open')) open++;
+    if (card.classList.contains('closed') || card.classList.contains('error')) closed++;
+  });
+  document.getElementById('statTotal').textContent = open + closed;
+  document.getElementById('statOpen').textContent = open;
+  document.getElementById('statClosed').textContent = closed;
+}
+function clearResults() {
+  document.getElementById('results').innerHTML = '';
+  updateStats();
+}
+document.getElementById('clearBtn').onclick = clearResults;
+
+// ---- MESSAGE D'ATTENTE ANIME ----
+let waitingAnim = null;
+function showWaiting(msg) {
+  const bar = document.getElementById('waitingBar');
+  bar.style.display = 'block';
+  bar.classList.add('anim'); // pour le fade
+  let dots = 0;
+  document.getElementById('waitingText').innerHTML = msg + '<span id="dots">...</span>';
+  waitingAnim = setInterval(() => {
+    document.getElementById('dots').textContent = '.'.repeat((dots++ % 4) + 1);
+  }, 350);
+}
+function hideWaiting() {
+  const bar = document.getElementById('waitingBar');
+  bar.style.display = 'none';
+  
+  console.log('>> hideWaiting, display:', getComputedStyle(bar).display);
+  
+  bar.classList.remove('anim');
+  if (waitingAnim) clearInterval(waitingAnim);
+  waitingAnim = null;
+}
+
+function addResultCard({port, status, ms=null, service='', description='', error=''}) {
+  const card = document.createElement('div');
+  card.className = 'result-card ' + status;
+  let headerText =
+    status==='wait'
+      ? `<b>Port ${port} (${getCurrentProto()}) - Test en cours...</b> <span class="spinner"></span>`
+      : `<b>Port ${port} (${getCurrentProto()}) - ${status==='open'?'OUVERT':(status==='error'?'ERREUR':'FERMÉ')}</b>`;
+
+  // Bloc description masqué par défaut, visible au clic sur "Détails"
+  let descBlock = '';
+  if (description) {
+    // Ajoute <span class="desc"> et <br> si pas déjà présent
+    if (!description.includes('<span class="desc">')) {
+      let descArr = description.split(/<br\s*\/?>|\|/i).map(t => t.trim()).filter(Boolean);
+      description = descArr.map(desc => `<span class="desc">${desc}</span>`).join('<br>');
+    }
+    descBlock = `
+      <a href="#" class="toggle-details" style="margin-left:12px; font-size:.98em; color:#fff; text-decoration:underline;">Détails</a>
+      <div class="details-desc" style="display:none; margin-top:7px; background:rgba(0,0,0,.07); border-radius:8px; padding:7px 12px; color:#222;">
+        ${description}
+      </div>
+    `;
+  }
+
+  card.innerHTML =
+    `<div class="header">${headerText}</div>
+     <div class="service">${service??''}${descBlock}</div>
+     ${status!=='wait' && ms!==null ? `<div class="time">Temps de réponse : ${ms}ms</div>` : ''}
+     ${error ? `<div class="error-msg">Erreur : ${error}</div>` : ''}`;
+
+  // Gère l'ouverture/fermeture de la description au clic
+  const toggle = card.querySelector('.toggle-details');
+  if (toggle) {
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      const descDiv = card.querySelector('.details-desc');
+      if (descDiv.style.display === 'none') {
+        descDiv.style.display = '';
+        toggle.textContent = "Masquer les détails";
+      } else {
+        descDiv.style.display = 'none';
+        toggle.textContent = "Détails";
+      }
+    });
+  }
+
+  document.getElementById('results').appendChild(card);
+  if (status !== 'wait') updateStats();
+  return card;
+}
+
+// Utilitaire pour retrouver le protocole sélectionné
+function getCurrentProto() {
+  return document.getElementById('protocolSelect').value || 'TCP';
+}
+
+document.getElementById('scanBtn').onclick = async function() {
+  stopScan();
+  clearResults();
+  hideWaiting();
+  const host = document.getElementById('hostname').value.trim();
+  let port = Number(document.getElementById('customPort').value) || Number(document.getElementById('portSelect').value);
+  const timeout = Number(document.getElementById('timeoutInput').value) || 5000;
+  const proto = getCurrentProto().toUpperCase();
+
+  const portObj = uniquePortList.find(p => Number(p.port) === port && p.protocol === proto);
+
+  if (!host || !port || isNaN(port)) {
+    addResultCard({
+      port,
+      status: 'error',
+      service: '',
+      description: '',
+      error: 'Port personnalisé invalide ou manquant.'
+    });
+    return;
+  }
+
+  // Même pour un port inconnu, on scanne (infos vides)
+  let service = portObj ? portObj.services.join(', ') : 'Port personnalisé';
+  let description = portObj
+    ? portObj.descriptions.filter(Boolean).map(desc => `<span class="desc">${desc}</span>`).join('<br>')
+    : '';
+
+  const waitCard = addResultCard({
+    port,
+    status: 'wait',
+    service,
+    description
+  });
+  try {
+    const t0 = performance.now();
+    const resp = await fetchWithTimeout(
+      `/test-port.php?host=${encodeURIComponent(host)}&port=${port}&proto=${proto}&timeout=${timeout}`,
+      timeout
+    );
+    const t1 = performance.now();
+    let res, ms = Math.round(t1-t0);
+    if (resp.ok && resp.headers.get('Content-Type')?.includes('application/json')) {
+      res = await resp.json();
+    } else {
+      const text = await resp.text();
+      throw new Error('HTTP '+resp.status+' : '+text);
+    }
+    waitCard.remove();
+    addResultCard({
+      port,
+      status: res.isOpen ? 'open' : 'closed',
+      ms,
+      service,
+      description,
+      error: res.isOpen ? '' : (res.error || (ms > timeout ? "Timeout" : "Connexion refusée"))
+    });
+  } catch(e) {
+    waitCard.remove();
+    addResultCard({
+      port,
+      status: 'closed',
+      ms: '',
+      service,
+      description,
+      error: e.message
+    });
+  }
+};
+
+
+
+document.getElementById('scanAllBtn').onclick = async function() {
+  showWaiting('Scan en cours');
+  clearResults();
+  const host = document.getElementById('hostname').value.trim();
+  const timeout = Number(document.getElementById('timeoutInput').value) || 5000;
+  const proto = getCurrentProto();
+  if (!host) return;
+  scanning = true;
+  document.getElementById('scanAllBtn').disabled = true;
+  document.getElementById('scanBtn').disabled = true;
+  document.getElementById('stopBtn').disabled = false;
+  // ON UTILISE uniquePortList filtré sur le protocole voulu
+  const filteredPorts = uniquePortList.filter(p => p.protocol === proto.toUpperCase());
+  for (const p of filteredPorts) {
+    if (!scanning) break;
+    const port = Number(p.port);
+    if (!port || isNaN(port)) {
+      addResultCard({
+        port: p.port ?? '',
+        status: 'error',
+        service: p.services.join(', '),
+        description: p.descriptions.filter(Boolean).join('<br>'),
+        error: 'Port CSV invalide ou vide'
+      });
+      continue;
+    }
+    const waitCard = addResultCard({
+      port: p.port,
+      status: 'wait',
+      service: p.services.join(', '),
+      description: p.descriptions.filter(Boolean).join('<br>')
+    });
+    const t0 = performance.now();
+    try {
+      await new Promise(res => {
+        let t = setTimeout(res, 75); scanTimeouts.push(t);
+      });
+      const resp = await fetchWithTimeout(
+        `/test-port.php?host=${encodeURIComponent(host)}&port=${port}&proto=${proto}&timeout=${timeout}`,
+        timeout
+      );
+      const t1 = performance.now();
+      let res, ms = Math.round(t1-t0);
+      if (resp.ok && resp.headers.get('Content-Type')?.includes('application/json')) {
+        res = await resp.json();
+      } else {
+        const text = await resp.text();
+        throw new Error('HTTP '+resp.status+' : '+text);
+      }
+      waitCard.remove();
+      addResultCard({
+        port: p.port,
+        status: res.isOpen ? 'open' : 'closed',
+        ms,
+        service: p.services.join(', '),
+        description: p.descriptions.filter(Boolean).join('<br>'),
+        error: res.isOpen ? '' : (res.error || (ms > timeout ? "Timeout" : "Connexion refusée"))
+      });
+    } catch(e) {
+      waitCard.remove();
+      addResultCard({
+        port: p.port,
+        status: 'closed',
+        ms: '',
+        service: p.services.join(', '),
+        description: p.descriptions.filter(Boolean).join('<br>'),
+        error: e.message
+      });
+    }
+  }
+  document.getElementById('scanAllBtn').disabled = false;
+  document.getElementById('scanBtn').disabled = false;
+  document.getElementById('stopBtn').disabled = true;
+  scanning = false;
+  hideWaiting();
+  updateStats();
+};
+
+
+document.getElementById('stopBtn').onclick = stopScan;
+function stopScan() {
+  scanning = false;
+  scanTimeouts.forEach(t => clearTimeout(t));
+  scanTimeouts = [];
+  document.getElementById('scanAllBtn').disabled = false;
+  document.getElementById('scanBtn').disabled = false;
+  document.getElementById('stopBtn').disabled = true;
+  hideWaiting();
+}
+
+// Protocole : MAJ de la liste si on change TCP/UDP
+document.getElementById('protocolSelect').addEventListener('change', updatePortSelectByProtocol);
+
+// Chargement des ports à l’ouverture
+window.addEventListener('DOMContentLoaded', async () => {
+  document.getElementById('hostname').value = window.location.hostname || '';
+  await loadPortsFromCSV();
+  updatePortSelectByProtocol();
+});
+let scanTimeouts = [], scanning = false;

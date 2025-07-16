@@ -1,0 +1,51 @@
+<div class="logs-root">
+	<div id="logs-container">
+	  <div id="search-bar">
+		<div class="source-select-bar">
+		  <label for="log-source-select">Source :</label>
+		  <select id="log-source-select">
+			<option value="local">Logs locaux</option>
+			<option value="user">Logs personnels</option>
+			<!-- Ajoute d'autres sources si besoin -->
+		  </select>
+		</div>
+		<div class="input-with-clear">
+		  <input id="search-input" type="text" placeholder="Recherche...">
+		  <span id="search-loupe"><i class="fa fa-search"></i></span>
+		  <button id="search-clear" style="display:none"><i class="fa fa-times-circle"></i></button>
+		</div>
+		<button id="search-btn"><i class="fa fa-search"></i> Rechercher</button>
+		<button id="reload-db-btn"><i class="fa fa-sync"></i> Recharger la base</button>
+	  </div>
+	  <div id="logs-error"></div>
+	  <div id="upload-zone">
+		<form id="upload-form" enctype="multipart/form-data">
+		  <label class="custom-file-button">
+			<input type="file" name="logfile" id="file-upload" style="display:none;">
+			<span>Choisir un fichier XML</span>
+		  </label>
+		  <span id="file-chosen"></span>
+		  <button type="submit"><i class="fa fa-upload"></i> Importer</button>
+		</form>
+		<div id="upload-feedback"></div>
+	  </div>
+	  <div class="table-wrapper">
+		<table id="logs-table" class="display nowrap" style="width:100%">
+		  <thead>
+			<tr>
+			  <th>Date/Heure</th>
+			  <th>Machine</th>
+			  <th>Utilisateur</th>
+			  <th>Action</th>
+			  <th>Événement</th>
+			  <th>Description</th>
+			</tr>
+		  </thead>
+		  <tbody>
+			<!-- Rempli dynamiquement par DataTables -->
+		  </tbody>
+		</table>
+	  </div>
+	</div>
+	<div id="messageBox" style="display:none"></div>
+</div>

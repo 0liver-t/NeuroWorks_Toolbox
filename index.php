@@ -37,6 +37,7 @@ define("XL_USER", $_SESSION['username']);
   <link rel="stylesheet" href="styles/jquery.dataTables.min.css">
   <link rel="stylesheet" href="styles/buttons.dataTables.min.css">
   <link rel="stylesheet" href="styles/all.min.css">
+  <link rel="stylesheet" href="styles/port-scanner.css">
   <link rel="stylesheet" href="styles/journaux.css"> <!-- À charger en dernier -->
 
   <!-- Scripts -->
@@ -51,6 +52,7 @@ define("XL_USER", $_SESSION['username']);
   <script src="scripts/vfs_fonts.js"></script>
   <script src="scripts/buttons.html5.min.js"></script>
   <script src="scripts/buttons.print.min.js"></script>
+  <script src="scripts/port-scanner.js" defer></script>
   <script src="scripts/journaux.js" defer></script>
 
   <script>
@@ -70,7 +72,7 @@ define("XL_USER", $_SESSION['username']);
       const tabs = document.querySelectorAll(".tab");
       const contents = document.querySelectorAll(".tab-content");
 
- tabs.forEach(tab => {
+tabs.forEach(tab => {
   tab.addEventListener("click", () => {
     tabs.forEach(t => t.classList.remove("active"));
     contents.forEach(c => c.classList.remove("active"));
@@ -79,13 +81,39 @@ define("XL_USER", $_SESSION['username']);
     const targetId = tab.getAttribute("data-tab");
     document.getElementById(targetId).classList.add("active");
 
-    // PATCH : Détruit DataTable si on quitte "Journaux"
-    if (targetId !== "tab-logs" && $.fn.DataTable && $.fn.DataTable.isDataTable('#logs-table')) {
-      $('#logs-table').DataTable().clear().destroy();
-      $('#logs-table').empty();
+    // PATCH : Onglet LOGS
+    if (targetId === "tab-logs") {
+      // (Ré)initialiser DataTable UNIQUEMENT si nécessaire
+      if ($.fn.DataTable && (!$.fn.DataTable.isDataTable('#logs-table'))) {
+        if (typeof initDataTable === 'function') initDataTable();
+      } else if ($.fn.DataTable && $.fn.DataTable.isDataTable('#logs-table')) {
+        setTimeout(function() {
+          $('#logs-table').DataTable().columns.adjust().draw(false);
+        }, 100);
+      }
+      // Montrer la table
+      $('#logs-table').show();
+    } else {
+      // PATCH : détruire et masquer la DataTable
+      if ($.fn.DataTable && $.fn.DataTable.isDataTable('#logs-table')) {
+        $('#logs-table').DataTable().clear().destroy();
+        // (optionnel) Remettre le thead pour la future initialisation
+        $('#logs-table').html('<thead><tr>'
+          + '<th>Date/Heure</th>'
+          + '<th>Machine</th>'
+          + '<th>Utilisateur</th>'
+          + '<th>Action</th>'
+          + '<th>Événement</th>'
+          + '<th>Description</th>'
+          + '</tr></thead>');
+      }
+      $('#logs-table').hide();
     }
   });
 });
+
+
+
 
     });
   </script>
@@ -131,7 +159,7 @@ define("XL_USER", $_SESSION['username']);
 </div>
 
 <div class="tab-content" id="tab-check">
-  <?php include 'ports_checker.php'; ?>
+  <?php include 'port-scanner.php'; ?>
 </div>
 
 <script>

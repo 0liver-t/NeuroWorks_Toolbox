@@ -1,0 +1,223 @@
+.portscanner-root {
+  background: linear-gradient(135deg,#8688d8 0%,#7ed4fc 100%);
+  font-family: 'Segoe UI',Arial,sans-serif;
+  font-size: 15px;
+}
+.portscanner-root .container {
+  max-width: 1100px;
+  margin: 24px auto;
+  background: #fff;
+  border-radius: 24px;
+  padding: 22px 15px 26px 15px;
+  box-shadow: 0 6px 32px #2222;
+}
+.portscanner-root h1 {
+  text-align: center;
+  margin-top: 0;
+  font-size: 2em;
+  color: #202940;
+  letter-spacing: .02em;
+  margin-bottom: 20px;
+}
+.portscanner-root .controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: end;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+.portscanner-root .controls label { font-size: 1em; margin-bottom: 2px; display: block;}
+.portscanner-root .controls input, 
+.portscanner-root .controls select {
+  padding: 5px 11px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  font-size: 1em;
+  margin-bottom: 0;
+}
+.portscanner-root .button-group {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+}
+.portscanner-root button {
+  padding: 8px 16px;
+  font-size: 0.98em;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.16s;
+  background: #2186d4;
+  color: #fff;
+}
+.portscanner-root button:disabled { opacity: .55; cursor: not-allowed;}
+.portscanner-root #scanAllBtn { background: #d83535;}
+.portscanner-root #scanAllBtn:hover { background: #b51e1e;}
+.portscanner-root #scanBtn { background: #2186d4;}
+.portscanner-root #scanBtn:hover { background: #175ba2;}
+.portscanner-root #stopBtn { background: #ff9800; color: #fff;}
+.portscanner-root #stopBtn:hover { background: #c66900;}
+.portscanner-root #clearBtn {
+  background: #8b969a;
+  margin-right: 8px;
+  color: #fff;
+  font-weight: 500;
+}
+.portscanner-root #clearBtn:hover { background: #616668;}
+.portscanner-root .stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 16px 0 14px 0;
+  background: none;
+}
+.portscanner-root .stat {
+  background: #fff;
+  flex: 1 1 0;
+  margin: 0 7px;
+  border-radius: 18px;
+  box-shadow: 0 2px 11px #aabbe611;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 0 8px 0;
+}
+.portscanner-root .stat-number {
+  font-size: 2em;
+  font-weight: 700;
+  color: #2d3a4b;
+  letter-spacing: 1px;
+}
+.portscanner-root .stat-label {
+  font-size: 1em;
+  color: #7a8a9c;
+  margin-top: 3px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.portscanner-root #waitingBar {
+  display: none;
+  margin: 18px auto 22px auto;
+  max-width: 500px;
+  text-align: center;
+  background: none;
+  color: #23272f;
+  font-size: 1.22em;
+  font-weight: bold;
+  border-radius: 12px;
+  padding: 10px 8px;
+  box-shadow: none;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+.portscanner-root #waitingBar.anim {
+  animation: fadeInOut 1.2s linear infinite;
+}
+@keyframes fadeInOut {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.35; }
+  100% { opacity: 1; }
+}
+.portscanner-root .results {
+  margin-top: 0px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.portscanner-root .result-card {
+  border-radius: 18px;
+  box-shadow: 0 3px 14px #3332;
+  padding: 14px 16px 8px 14px;
+  background: #e2e2e2;
+  font-size: 1em;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: background .2s;
+}
+.portscanner-root .result-card.open   { background: #26be60; color: #fff; }
+.portscanner-root .result-card.closed { background: #e1493c; color: #fff; }
+.portscanner-root .result-card.error  { background: #7a3e3e; color: #fff;}
+.portscanner-root .result-card.wait   {
+  background: linear-gradient(90deg, #ffd750 0%, #ffb300 100%);
+  color: #222;
+}
+.portscanner-root .result-card .header {
+  font-weight: 700;
+  font-size: 1.04em;
+  margin-bottom: 2px;
+}
+.portscanner-root .result-card .desc {
+  font-size: .95em;
+  opacity: .92;
+  margin-bottom: 1px;
+  font-weight: 500;
+}
+.portscanner-root .desc {
+  display: block;
+  margin: 4px 0 4px 0;
+  font-size: 0.99em;
+}
+.portscanner-root .result-card .service {
+  font-size: .98em;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+.portscanner-root .result-card .time {
+  font-size: .97em;
+  font-weight: 500;
+  color: #fff;
+  margin-top: 2px;
+}
+.portscanner-root .result-card.closed .time { color: #ffeaea; }
+.portscanner-root .result-card.wait .time   { color: #222;}
+.portscanner-root .result-card.open .time   { color: #dcffef;}
+.portscanner-root .error-msg {
+  color: #fff;
+  background: #ad1833;
+  padding: 5px 9px;
+  border-radius: 7px;
+  display: inline-block;
+  font-size: .95em;
+}
+.portscanner-root .spinner {
+  width: 1.25em;
+  height: 1.25em;
+  border: 3px solid #ffd750;
+  border-top: 3px solid #ffb300;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spin 0.8s linear infinite;
+  margin-left: 10px;
+  vertical-align: -0.24em;
+  box-sizing: border-box;
+}
+.portscanner-root .result-card.wait .spinner {
+  border: 3px solid #ffd750;
+  border-top: 3px solid #ffb300;
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+@media (max-width: 900px) {
+  .portscanner-root .controls { flex-wrap: wrap; flex-direction: column; gap: 8px;}
+  .portscanner-root .stats { flex-direction: column; gap: 8px;}
+  .portscanner-root .stat { margin: 4px 0; }
+  .portscanner-root .results { gap: 7px;}
+  .portscanner-root .result-card { padding: 7px 4px; }
+  .portscanner-root #waitingBar { font-size: 1em; height:20px;}
+}
+.portscanner-root .input-short {
+  width: 105px;
+  max-width: 140px;
+  min-width: 80px;
+  font-size: 1em;
+  padding-left: 8px;
+  padding-right: 52px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  box-sizing: border-box;
+  text-align: right;
+}
